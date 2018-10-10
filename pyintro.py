@@ -240,9 +240,13 @@ def slice_us(out, word):
 
 def duplicate(s, n):
     if not isinstance(s, str) or not isinstance(n, int):
-        raise Exception("<invalid input>")
-
-    return ""
+        raise Exception("ERROR: first argument must be a string and second arg a positive integer")
+    if len(s) < 2:
+        raise Exception("ERROR: first argument must be 2 characters or longer")
+    if n <= 0:
+        raise Exception("ERROR: second argument must be a positive integer")
+ 
+    return s[-2:] * n
 
 # Given a string s and a number n, return a new string made of
 # n copies of the last 2 chars in the original str. (hint: slicing)
@@ -250,7 +254,10 @@ def duplicate(s, n):
 
 
 def shortlongshort(s1, s2):
-    return ""
+    if not isinstance(s1, str) or not isinstance(s2, str):
+        raise Exception("ERROR: Only strings can be passed to this function.")
+
+    return s1 + s2 + s1 if len(s2) >= len(s1) else s2 + s1 + s2
 
 # Given 2 strings, return a new string in the form of shortlongshort
 # use len(s) to figure out the length of a str
@@ -259,16 +266,25 @@ def shortlongshort(s1, s2):
 #########################################################
 #                    INTEGER PRACTICE                   #
 #########################################################
+def assert_isInt(n):
+    if not isinstance(n, int):
+        raise Exception("ERROR: Invalid parameter type")
+    pass
+
 def adding(a, b):
-    return 0
+    assert_isInt(a)
+    assert_isInt(b)
+
+    return a+b if a != b else 2*(a+b)
 
 
 # return the sum of the two values
 # unless the values are the same, then double their sum
 
-
 def abs_dif(n):
-    return 0
+    assert_isInt(n)
+
+    return abs(n-21) if n <= 21 else 2*abs(n-21)
 
 # given an int n, return the absolute value of the difference between n and 21
 # double it if n is over 21
@@ -276,21 +292,29 @@ def abs_dif(n):
 
 
 def tens(a, b):
-    return 0
+    assert_isInt(a)
+    assert_isInt(b)
+
+    return a==10 or b==10 or a+b==10
 
 # given 2 ints, return True if one of them is 10, or if their sum is 10
 # else return false
 
 
 def hundreds(n):
-    return 0
+    assert_isInt(n)
+    
+    return abs(100-n) <= 10
 
 # given an int n, return True if it is within 10 of 100
 # note: abs(num) computes the absolute value of a number
 
 
 def negatives(a, b, negative):
-    return 0
+    assert_isInt(a)
+    assert_isInt(b)
+
+    return a*b < 0 if not negative else a < 0 and b < 0
 
 # given 2 int values, return True if one is negative and one is positive
 # Except if the paramater "negative" is True, then return True only if both are negative
@@ -300,8 +324,17 @@ def negatives(a, b, negative):
 #######################################################
 #                     LIST PRACTICE                   #
 #######################################################
+def assert_isList(v):
+    # Demand that the parameter be a list
+    if not isinstance(v, list):
+        raise Exception("ERROR: Parameter must be a list")
+
 def sixes(a):
-    return []
+    assert_isList(a)
+    if len(a) < 2:
+        return False     # Due to the requirements, pointless to proceed if we don't have at least two elements
+
+    return a[0] == 6 or a[-1]==6
 
 
 # given a list of integers a, return True if 6 appears as either
@@ -310,7 +343,11 @@ def sixes(a):
 
 
 def same_length(a):
-    return []
+    assert_isList(a)
+    if len(a) < 1:
+        return False
+
+    return len(a) > 1 and a[0] == a[-1]
 
 # given an array of ints, return True if the array is greater than length 1
 # and the first element and the last element are the same value
@@ -319,7 +356,10 @@ def same_length(a):
 
 
 def sum_list(l):
-    return []
+    assert_isList(l)# assert that l is a list
+    for num in l:   # also assert list is a list of numbers
+        assert_isInt(num)
+    return sum(val for val in l)
 
 # given an array of integers, return the sum of those integers
 # there is a built in function that does this already, bonus points if you use it
@@ -327,7 +367,9 @@ def sum_list(l):
 
 
 def rotate_slice(l):
-    return []
+    assert_isList(l)
+
+    return l[2:] + l[:2]
 
 # given a list l, rotate it left by 2 spaces
 # [1,2,3,4] -> [3,4,1,2]
@@ -335,7 +377,11 @@ def rotate_slice(l):
 
 
 def pop_append(l):
-    return []
+    assert_isList(l)
+    if len(l) < 2:  # will not work for lists shorter than length 2
+        return []
+
+    return l[:-2] + [l[-1]*l[-2], l[0]+l[1]]
 
 # given a list l of integers, do the following:
 # 1. remove the last 2 items from the list (use l.pop())
@@ -347,29 +393,34 @@ def pop_append(l):
 #           BOOLEAN PRACTICE            #
 #########################################
 def basic_bool(a, b, c):
-    return True
-
+    count = 0
+    if a: count += 1
+    if b: count += 1
+    if c: count += 1
+    return count
 
 # write "if" statements that check if a,b,c are true or false
 # note: do not do a==False or a==True
 # return the number of True's
 
-
 def multi_bool(a, b):
-    return True
+    assert_isInt(a)
+    assert_isInt(b)
+
+    return a*b > 0
 
 # write an "if" statement that checks if the product of a and b
 # is greater than 0 if so return True, else return False
 
-
 def iter_bool(a):
+    assert_isList(a)
+    for i in range(len(a)):
+        assert_isInt(a[i])
     return True
-
 
 # a is a list of integers, using a for loop, iterate through a to find
 # all instances of the number 7.  If a 6 appears, break out of the for loop.
 # if the number of 7's found is 0, return the number 1337
-
 
 def complex_bool_one(a, b, c):
     return True
