@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PyIntro", "PyIntro.pyproj", "{FDCA78B2-49B8-4FD3-B36C-C2AAF004BABE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDCA78B2-49B8-4FD3-B36C-C2AAF004BABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDCA78B2-49B8-4FD3-B36C-C2AAF004BABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D3F7F79B-E483-4225-A6CA-CD6C0A7F3C71}
+	EndGlobalSection
+EndGlobal
