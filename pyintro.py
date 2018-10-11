@@ -5,6 +5,24 @@ import os
 # this script by doing just "./ptpp.py", instead of "python ptpp.py".  It informs
 # linux that python is what will be used to run this script
 
+# Type-checking functions - to guarantee that variables are a certain type
+def assert_isInt(n):
+    if not isinstance(n, int):
+        raise Exception("ERROR: Invalid parameter type")
+    pass
+
+def assert_isList(v):
+    # Demand that the parameter be a list
+    if not isinstance(v, list):
+        raise Exception("ERROR: Parameter must be a list")
+    pass
+
+def assert_isString(s):
+    # Demand that the parameter be a string
+    if not isinstance(s, str):      # python3; if python2, use basestr
+        raise Exception("ERROR: Parameter must be a string")
+    pass
+    
 ###################################################
 #   AN EXPLANATION OF BASIC TYPES AND FUNCTIONS   #
 #  Use this section as REFERENCE as you practice! #
@@ -218,8 +236,8 @@ def greet(name):
 
 def abba(a, b):
     # Input checking
-    if not isinstance(a, str) or not isinstance(b, str):
-        raise Exception("<invalid input>")
+    assert_isString(a)
+    assert_isString(b)
 
     return a + b + b + a
 
@@ -228,8 +246,10 @@ def abba(a, b):
 
 
 def slice_us(out, word):
-    if not isinstance(out, str) or not isinstance(word, str):
-        raise Exception("<invalid input>")
+    assert_isString(out)
+    assert_isString(word)
+    if len(out) != 4:
+        raise Exception("Out string can only be of length 4")
 
     return out[0:2] + word + out[2:4]
 
@@ -239,8 +259,8 @@ def slice_us(out, word):
 
 
 def duplicate(s, n):
-    if not isinstance(s, str) or not isinstance(n, int):
-        raise Exception("ERROR: first argument must be a string and second arg a positive integer")
+    assert_isString(s)
+    assert_isInt(n)
     if len(s) < 2:
         raise Exception("ERROR: first argument must be 2 characters or longer")
     if n <= 0:
@@ -254,8 +274,13 @@ def duplicate(s, n):
 
 
 def shortlongshort(s1, s2):
-    if not isinstance(s1, str) or not isinstance(s2, str):
-        raise Exception("ERROR: Only strings can be passed to this function.")
+    assert_isString(s1)
+    assert_isString(s2)
+
+    if len(s1) == 0:
+        raise Exception("String s1 must not be blank")
+    if len(s2) == 0:
+        raise Exception("String s2 must not be blank")
 
     return s1 + s2 + s1 if len(s2) >= len(s1) else s2 + s1 + s2
 
@@ -266,10 +291,6 @@ def shortlongshort(s1, s2):
 #########################################################
 #                    INTEGER PRACTICE                   #
 #########################################################
-def assert_isInt(n):
-    if not isinstance(n, int):
-        raise Exception("ERROR: Invalid parameter type")
-    pass
 
 def adding(a, b):
     assert_isInt(a)
@@ -284,7 +305,7 @@ def adding(a, b):
 def abs_dif(n):
     assert_isInt(n)
 
-    return abs(n-21) if n <= 21 else 2*abs(n-21)
+    return abs(n-21) if n <= 21 else 2*(n-21)
 
 # given an int n, return the absolute value of the difference between n and 21
 # double it if n is over 21
@@ -324,10 +345,6 @@ def negatives(a, b, negative):
 #######################################################
 #                     LIST PRACTICE                   #
 #######################################################
-def assert_isList(v):
-    # Demand that the parameter be a list
-    if not isinstance(v, list):
-        raise Exception("ERROR: Parameter must be a list")
 
 def sixes(a):
     assert_isList(a)
@@ -340,7 +357,6 @@ def sixes(a):
 # given a list of integers a, return True if 6 appears as either
 # the first or last element.  The array length will be one or more
 # hint: use a for loop
-
 
 def same_length(a):
     assert_isList(a)
@@ -368,6 +384,8 @@ def sum_list(l):
 
 def rotate_slice(l):
     assert_isList(l)
+    for num in l:   # also assert list is a list of numbers
+        assert_isInt(num)
 
     return l[2:] + l[:2]
 
@@ -378,10 +396,18 @@ def rotate_slice(l):
 
 def pop_append(l):
     assert_isList(l)
+    for num in l:   # also assert list is a list of numbers
+        assert_isInt(num)
+
     if len(l) < 2:  # will not work for lists shorter than length 2
         return []
 
-    return l[:-2] + [l[-1]*l[-2], l[0]+l[1]]
+    x = l.pop()
+    y = l.pop()
+    
+    l.append(x*y)
+    l.append(l[0] + l[1])
+    return l
 
 # given a list l of integers, do the following:
 # 1. remove the last 2 items from the list (use l.pop())
@@ -414,16 +440,38 @@ def multi_bool(a, b):
 
 def iter_bool(a):
     assert_isList(a)
+    
+    if len(a) == 0:
+        return 1337  # No 7's can possibly exist in a list of zero length
+
+    # demand that each element of the list 'a' be an int, or else raise
+    # an exception
     for i in range(len(a)):
         assert_isInt(a[i])
-    return True
+        
+    # iterate through the list and test values
+    result = 1337               # default value
+    for i in range(len(a)):
+        if a[i] == 6:
+            break
+
+        if a[i] == 7:
+            if result == 1337:
+                result = 1
+            else:
+                result += 1
+    return result
 
 # a is a list of integers, using a for loop, iterate through a to find
 # all instances of the number 7.  If a 6 appears, break out of the for loop.
 # if the number of 7's found is 0, return the number 1337
 
 def complex_bool_one(a, b, c):
-    return True
+    assert_isInt(a)
+    assert_isInt(b)
+    assert_isInt(c)
+
+    return a > b and a > c
 
 
 # write a SINGLE return statement, an no other lines of code
@@ -431,20 +479,28 @@ def complex_bool_one(a, b, c):
 
 
 def complex_bool_two(a, b, c):
-    return True
+    assert_isInt(a)
+    assert_isInt(b)
+    assert_isInt(c)
 
+    return (abs(a-c) <= 1 or abs(b-c) <= 1) and (abs(a-b) >= 2 or abs(a-c) >= 2 or abs(b-c) >= 2)
 
 # write a single return statment: return true if -
 # 1- one of a OR b is close to c (within 1 number) AND
 # 2- one of a OR b is far from the other two (>= 2 away)
 
-
 ##################################################
 #              LOOPING AND ITERATION             #
 ##################################################
 def count_for(l):
-    l
+    # Demand that we have a list of strings
+    assert_isList(l)
+    for i in range(len(l)):
+        assert_isString(l[i])
+        if l[i].startswith("xkcd"):
+            l[i] = l[i].replace("xkcd", "CAD")
 
+    return l
 
 # given a list of strings (l), iterate through each item using a counter
 # if the item begins with "xkcd", strip off "xkcd" frrom the beginning
@@ -453,7 +509,20 @@ def count_for(l):
 
 
 def iter_for(l):
-    l
+    #Demand that we have a list of ints
+    assert_isList(l)
+    even_sum = 0
+    odd_sum = 0
+    for i in range(len(l)):
+        assert_isInt(l[i])      # ith item must be an int
+        if l[i] % 2 == 0:
+            even_sum += l[i]
+        else:
+            odd_sum += l[i]
+    
+    print("even_sum = {}".format(even_sum))
+    print("odd_sum = {}".format(odd_sum))
+    return even_sum*odd_sum 
 
 # given a list of integers (l), iterate through each item
 # if the int is even, add it to even_sum
@@ -462,7 +531,18 @@ def iter_for(l):
 
 
 def pop_while(l):
-    l
+    if len(l) == 0:
+        return (l, 0)  # define the sum of an empty list to be zero
+        
+    assert_isList(l)
+    for i in range(len(l)):
+        assert_isInt(l[i])
+        
+    m = 0
+    while(l):
+        m += l.pop()
+        
+    return (l, m)
 
 # Given a list of integers (l), use a while loop that tests if l evalutes to True (not empty)
 # If l is not empty, use l.pop() to add the numbers in the list to m
@@ -473,9 +553,11 @@ def pop_while(l):
 #               FUNCTIONS!                    #
 ###############################################
 
-def functions_one():
-    return
+def my_first_function():
+    return True
 
+def functions_one():
+    my_first_function()
 
 # write a function named my_first_function
 # have it accept no parameters, and return True
@@ -483,9 +565,15 @@ def functions_one():
 # call the function from functions_one()
 # Hint: make sure you define it above this one
 
+def my_second_function(a,b):
+    assert_isInt(a)
+    assert_isInt(b)
+
+    return a*b
 
 def functions2():
-    return
+    return my_second_function(2,3)
+
 # write a function named my_second_function
 # have it return the product of a,b
 
